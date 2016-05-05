@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,29 +9,33 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/dummy_custom_dialog_content_image"/>
+            android:contentDescription="@string/dialog_image"
+            android:id="@+id/one_button_custom_dialog_image"
+            tools:src="@drawable/dummy_custom_dialog_content_image" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Custom dialog sample message"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp" />
+            android:layout_marginStart="10dp"
+            android:id="@+id/one_button_custom_dialog_content_text"
+            tools:text="Custom dialog sample message" />
 
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:id="@+id/one_button_custom_dialog_button"/>
+        android:id="@+id/one_button_custom_dialog_button"
+        tools:text="Button" />
 
 </LinearLayout>

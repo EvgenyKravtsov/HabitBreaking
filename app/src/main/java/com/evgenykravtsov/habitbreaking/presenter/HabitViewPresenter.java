@@ -1,7 +1,5 @@
 package com.evgenykravtsov.habitbreaking.presenter;
 
-import com.evgenykravtsov.habitbreaking.R;
-import com.evgenykravtsov.habitbreaking.model.MainApp;
 import com.evgenykravtsov.habitbreaking.view.HabitView;
 
 public class HabitViewPresenter {
@@ -19,4 +17,12 @@ public class HabitViewPresenter {
     public void unsubscribe() {
         habitView = null;
     }
+
+    public boolean isUserRegistered() {
+
+        // TODO Implement logic
+
+        return false;
+    }
+
 }

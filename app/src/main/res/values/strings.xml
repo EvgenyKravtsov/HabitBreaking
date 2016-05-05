@@ -4,6 +4,29 @@
     <!-- Strings for habit screen -->
     <string name="button_restore_title">Restore</string>
     <string name="current_mode_label">Current mode:</string>
-    <string name="leisure_mode_label">Leisure</string>
     <string name="change_mode_button_label">Change</string>
+
+    <!-- Strings for registration screen -->
+    <string name="registration_screen_toolbar_title">Registration</string>
+    <string name="email_hint">Email</string>
+    <string name="gender_hint">Gender</string>
+    <string name="gender_male_hint">Male</string>
+    <string name="gender_female_hint">Female</string>
+    <string name="age_hint">Age</string>
+    <string name="registration_button_label">Register</string>
+    <string name="invalid_registration_data_message">Invalid registration data</string>
+
+    <!-- Strings for mode selection screen -->
+    <string name="mode_selection_screen_toolbar_title">Select mode</string>
+    <string name="choose_button_label">Choose</string>
+    <string name="leisure_mode_title">Leisure</string>
+    <string name="leisure_mode_description">For leisure</string>
+    <string name="control_mode_title">Control</string>
+    <string name="control_mode_description">For control</string>
+    <string name="health_mode_title">Health</string>
+    <string name="health_mode_description">For health</string>
+
+    <!-- Content descriptions -->
+    <string name="dialog_image">Dialog image</string>
+    <string name="mode_image">Mode image</string>
 </resources>

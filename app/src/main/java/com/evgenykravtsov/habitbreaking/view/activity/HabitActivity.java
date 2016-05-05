@@ -1,15 +1,19 @@
 package com.evgenykravtsov.habitbreaking.view.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.evgenykravtsov.habitbreaking.R;
 import com.evgenykravtsov.habitbreaking.presenter.HabitViewPresenter;
 import com.evgenykravtsov.habitbreaking.view.HabitView;
+import com.evgenykravtsov.habitbreaking.view.dialog.DialogFactory;
+import com.evgenykravtsov.habitbreaking.view.dialog.OneButtonDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,8 +41,8 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
 
     @OnClick(R.id.habit_screen_change_mode_button)
     public void onClickChangeModeButton() {
-        // TODO Delete test code
-        Log.d(TAG, "Change mode button clicked");
+        Intent startModeSelectionActivity = new Intent(this, ModeSelectionActivity.class);
+        startActivity(startModeSelectionActivity);
     }
 
     ////
@@ -80,8 +84,11 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.toolbar_button_restore:
-                // TODO Delete test code
-                Log.d(TAG, "Restore button clicked");
+                if (presenter.isUserRegistered()) {
+                    prepareStatisticRestoreConfirmationDialog().showDialogWindow();
+                } else {
+                    prepareRegistrationRequestDialog().showDialogWindow();
+                }
                 break;
         }
         return true;
@@ -96,5 +103,36 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     private void unsubscribePresenter() {
         presenter.unsubscribe();
         presenter = null;
+    }
+
+    private OneButtonDialog prepareStatisticRestoreConfirmationDialog() {
+        OneButtonDialog oneButtonDialog = DialogFactory.provideOneButtonCustomDialog(this);
+        oneButtonDialog.setImage(getResources().getDrawable(R.drawable.dummy_custom_dialog_content_image));
+        oneButtonDialog.setContentText("Gonna restore ur data, maaan");
+        oneButtonDialog.setButtonText("Proceed, bro");
+        oneButtonDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Data restore engaged...");
+            }
+        });
+        return oneButtonDialog;
+    }
+
+    private OneButtonDialog prepareRegistrationRequestDialog() {
+        final OneButtonDialog oneButtonDialog = DialogFactory.provideOneButtonCustomDialog(this);
+        oneButtonDialog.setImage(getResources().getDrawable(R.drawable.dummy_custom_dialog_content_image));
+        oneButtonDialog.setContentText("Dunno u, maaan");
+        oneButtonDialog.setButtonText("Not for long, bro");
+        oneButtonDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startRegistrationActivity = new Intent(HabitActivity.this,
+                        RegistrationActivity.class);
+                startActivity(startRegistrationActivity);
+                oneButtonDialog.dismissDialogWindow();
+            }
+        });
+        return oneButtonDialog;
     }
 }

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Habit Breaking</string>
+
+    <!-- Strings for habit screen -->
+    <string name="button_restore_title">Restore</string>
+    <string name="current_mode_label">Current mode:</string>
+    <string name="leisure_mode_label">Leisure</string>
+    <string name="change_mode_button_label">Change</string>
+</resources>

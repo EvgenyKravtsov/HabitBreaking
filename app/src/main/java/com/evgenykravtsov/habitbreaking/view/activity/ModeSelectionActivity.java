@@ -6,11 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.evgenykravtsov.habitbreaking.R;
 import com.evgenykravtsov.habitbreaking.model.mode.ModeFactory;
+import com.evgenykravtsov.habitbreaking.presenter.ModeSelectionPresenter;
 import com.evgenykravtsov.habitbreaking.view.adapter.ModeListAdapter;
+import com.evgenykravtsov.habitbreaking.view.event.ModeChosenEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,16 +32,45 @@ public class ModeSelectionActivity extends AppCompatActivity {
 
     ////
 
+    private ModeSelectionPresenter presenter;
+    private ModeListAdapter adapter;
+
+    ////
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mode_selection);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+
         prepareToolbar();
         prepareModeListView();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter = new ModeSelectionPresenter();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unsubscribePresenter();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     ////
+
+    private void unsubscribePresenter() {
+        presenter = null;
+    }
 
     private void prepareToolbar() {
         toolbar.setTitle(getString(R.string.mode_selection_screen_toolbar_title));
@@ -54,7 +89,28 @@ public class ModeSelectionActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         modeListRecyclerView.setLayoutManager(layoutManager);
 
-        ModeListAdapter adapter = new ModeListAdapter(this, ModeFactory.provideModeList(), null);
+        adapter = new ModeListAdapter(ModeFactory.provideModeList());
         modeListRecyclerView.setAdapter(adapter);
+    }
+
+    ////
+
+    @Subscribe
+    public void onModeChosenEvent(ModeChosenEvent event) {
+        int mode = 0;
+        switch (event.getChosenType()) {
+            case LEISURE:
+                mode = 0;
+                break;
+            case CONTROL:
+                mode = 1;
+                break;
+            case HEALTH:
+                mode = 2;
+                break;
+        }
+
+        presenter.saveModeToSettingsStorage(mode);
+        adapter.setModes(ModeFactory.provideModeList());
     }
 }

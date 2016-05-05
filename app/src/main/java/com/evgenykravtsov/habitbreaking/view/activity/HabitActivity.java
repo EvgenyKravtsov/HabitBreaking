@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.evgenykravtsov.habitbreaking.R;
 import com.evgenykravtsov.habitbreaking.presenter.HabitViewPresenter;
@@ -26,6 +27,7 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     ////
 
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.habit_screen_current_mode) TextView currentModeTextView;
 
     ////
 
@@ -64,6 +66,7 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     @Override
     protected void onResume() {
         super.onResume();
+        refreshUi();
     }
 
     @Override
@@ -96,13 +99,13 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
 
     ////
 
-    private void prepareToolbar() {
-        setSupportActionBar(toolbar);
-    }
-
     private void unsubscribePresenter() {
         presenter.unsubscribe();
         presenter = null;
+    }
+
+    private void prepareToolbar() {
+        setSupportActionBar(toolbar);
     }
 
     private OneButtonDialog prepareStatisticRestoreConfirmationDialog() {
@@ -134,5 +137,9 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
             }
         });
         return oneButtonDialog;
+    }
+
+    private void refreshUi() {
+        currentModeTextView.setText(presenter.getCurrentModeTitle());
     }
 }

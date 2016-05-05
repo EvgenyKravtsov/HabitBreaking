@@ -13,7 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.evgenykravtsov.habitbreaking.R;
+import com.evgenykravtsov.habitbreaking.model.MainApp;
 import com.evgenykravtsov.habitbreaking.model.mode.Mode;
+import com.evgenykravtsov.habitbreaking.model.mode.ModeType;
+import com.evgenykravtsov.habitbreaking.storage.StorageFactory;
+import com.evgenykravtsov.habitbreaking.storage.settingsstorage.SettingsStorageInteractor;
+import com.evgenykravtsov.habitbreaking.view.event.ModeChosenEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -29,22 +36,17 @@ public class ModeListAdapter extends RecyclerView.Adapter<ModeListAdapter.ViewHo
 
     private static final String TAG = ModeListAdapter.class.getSimpleName();
 
-    private OnItemClickListener listener;
-    private GestureDetector gestureDetector;
-
     private List<Mode> modes;
 
     ////
 
-    public ModeListAdapter(Context context, List<Mode> modes, OnItemClickListener listener) {
-        this.listener = listener;
-        gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapUp(MotionEvent motionEvent) {
-                return true;
-            }
-        });
+    public ModeListAdapter(List<Mode> modes) {
         this.modes = modes;
+    }
+
+    public void setModes(List<Mode> modes) {
+        this.modes = modes;
+        notifyDataSetChanged();
     }
 
     ////
@@ -62,6 +64,13 @@ public class ModeListAdapter extends RecyclerView.Adapter<ModeListAdapter.ViewHo
         holder.imageView.setImageDrawable(mode.getImage());
         holder.titleTextView.setText(mode.getTitle());
         holder.descriptionTextView.setText(mode.getDescription());
+
+        // TODO Delete test code
+        if (mode.getActivationStatus()) {
+            holder.chooseButton.setText("CHOSEN");
+        } else {
+            holder.chooseButton.setText("CHOOSE");
+        }
     }
 
     @Override
@@ -109,18 +118,25 @@ public class ModeListAdapter extends RecyclerView.Adapter<ModeListAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
 
-                    // TODO Delete test code
-                    if (titleTextView.getText().equals("Leisure")) {
-                        Log.d(TAG, "Leisure selected");
+                    Context appContext = MainApp.getAppContext();
+                    ModeChosenEvent event = new ModeChosenEvent();
+
+                    if (titleTextView.getText()
+                            .equals(appContext.getString(R.string.leisure_mode_title))) {
+                        event.setChosenType(ModeType.LEISURE);
                     }
 
-                    if (titleTextView.getText().equals("Control")) {
-                        Log.d(TAG, "Control selected");
+                    if (titleTextView.getText()
+                            .equals(appContext.getString(R.string.control_mode_title))) {
+                        event.setChosenType(ModeType.CONTROL);
                     }
 
-                    if (titleTextView.getText().equals("Health")) {
-                        Log.d(TAG, "Health selected");
+                    if (titleTextView.getText()
+                            .equals(appContext.getString(R.string.health_mode_title))) {
+                        event.setChosenType(ModeType.HEALTH);
                     }
+
+                    EventBus.getDefault().post(event);
                 }
             });
         }

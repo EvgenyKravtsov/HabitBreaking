@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.evgenykravtsov.habitbreaking.R;
 import com.evgenykravtsov.habitbreaking.presenter.HabitViewPresenter;
@@ -26,6 +27,8 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     ////
 
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.habit_screen_current_mode) TextView currentModeTextView;
+    @Bind(R.id.habit_screen_time_zone_label) TextView timeZoneLabelTextView;
 
     ////
 
@@ -35,8 +38,7 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
 
     @OnClick(R.id.habit_screen_habit_button)
     public void onClickHabitButton() {
-        // TODO Delete test code
-        Log.d(TAG, "Habit button clicked");
+        presenter.processHabitUsage();
     }
 
     @OnClick(R.id.habit_screen_change_mode_button)
@@ -64,6 +66,7 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     @Override
     protected void onResume() {
         super.onResume();
+        refreshUi();
     }
 
     @Override
@@ -96,13 +99,13 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
 
     ////
 
-    private void prepareToolbar() {
-        setSupportActionBar(toolbar);
-    }
-
     private void unsubscribePresenter() {
         presenter.unsubscribe();
         presenter = null;
+    }
+
+    private void prepareToolbar() {
+        setSupportActionBar(toolbar);
     }
 
     private OneButtonDialog prepareStatisticRestoreConfirmationDialog() {
@@ -134,5 +137,22 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
             }
         });
         return oneButtonDialog;
+    }
+
+    private void refreshUi() {
+        switch (presenter.getCurrentMode()) {
+            case LEISURE:
+                currentModeTextView.setText(getString(R.string.leisure_mode_title));
+                timeZoneLabelTextView.setText(getString(R.string.from_last_usage_label));
+                break;
+            case CONTROL:
+                currentModeTextView.setText(getString(R.string.control_mode_title));
+                timeZoneLabelTextView.setText(getString(R.string.from_last_usage_label));
+                break;
+            case HEALTH:
+                currentModeTextView.setText(getString(R.string.health_mode_title));
+                timeZoneLabelTextView.setText(getString(R.string.from_last_usage_label));
+                break;
+        }
     }
 }

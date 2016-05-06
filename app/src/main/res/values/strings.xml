@@ -5,6 +5,7 @@
     <string name="button_restore_title">Restore</string>
     <string name="current_mode_label">Current mode:</string>
     <string name="change_mode_button_label">Change</string>
+    <string name="from_last_usage_label">From last usage:</string>
 
     <!-- Strings for registration screen -->
     <string name="registration_screen_toolbar_title">Registration</string>

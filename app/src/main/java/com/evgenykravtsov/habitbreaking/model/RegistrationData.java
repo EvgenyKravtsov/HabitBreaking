@@ -2,6 +2,8 @@ package com.evgenykravtsov.habitbreaking.model;
 
 public class RegistrationData {
 
+    // TODO Move to network package
+
     private String email;
     private int gender;
     private int age;

@@ -18,4 +18,12 @@ public class MainApp extends Application {
     public static Context getAppContext() {
         return instance;
     }
+
+    ////
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 }

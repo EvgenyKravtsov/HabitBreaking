@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.evgenykravtsov.habitbreaking.R;
+import com.evgenykravtsov.habitbreaking.model.habitlogic.HabitService;
 import com.evgenykravtsov.habitbreaking.presenter.HabitViewPresenter;
 import com.evgenykravtsov.habitbreaking.view.HabitView;
 import com.evgenykravtsov.habitbreaking.view.dialog.DialogFactory;
@@ -29,10 +30,18 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.habit_screen_current_mode) TextView currentModeTextView;
     @Bind(R.id.habit_screen_time_zone_label) TextView timeZoneLabelTextView;
+    @Bind(R.id.habit_screen_time_counter_label) TextView timeCounterTextView;
 
     ////
 
     private HabitViewPresenter presenter;
+
+    ////
+
+    @Override
+    public void setTimeCounterText(String timeText) {
+        timeCounterTextView.setText(timeText);
+    }
 
     ////
 
@@ -55,6 +64,7 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
         setContentView(R.layout.activity_habit);
         ButterKnife.bind(this);
         prepareToolbar();
+        startHabitService();
     }
 
     @Override
@@ -153,6 +163,13 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
                 currentModeTextView.setText(getString(R.string.health_mode_title));
                 timeZoneLabelTextView.setText(getString(R.string.from_last_usage_label));
                 break;
+        }
+    }
+
+    private void startHabitService() {
+        if (!HabitService.habitServiceStatus) {
+            Intent startHabitService = new Intent(this, HabitService.class);
+            startService(startHabitService);
         }
     }
 }

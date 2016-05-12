@@ -31,4 +31,28 @@ public class SettingsStorageSharedPreferencesInteractor implements SettingsStora
     public int loadSettingAsInteger(String key, int defaultValue) {
         return sharedPreferences.getInt(key, defaultValue);
     }
+
+    @Override
+    public void saveSettingAsBoolean(String key, boolean value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    @Override
+    public boolean loadSettingAsBoolean(String key, boolean defaultValue) {
+        return sharedPreferences.getBoolean(key, defaultValue);
+    }
+
+    @Override
+    public void saveSettingAsLong(String key, long value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(key, value);
+        editor.apply();
+    }
+
+    @Override
+    public long loadSettingAsLong(String key, long defaultValue) {
+        return sharedPreferences.getLong(key, defaultValue);
+    }
 }

@@ -55,6 +55,11 @@
                 android:id="@+id/habit_screen_time_zone_label"
                 tools:text="@string/from_last_usage_label" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/habit_screen_time_counter_label" />
+
         </LinearLayout>
 
     </LinearLayout>

@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.evgenykravtsov.habitbreaking.R;
+import com.evgenykravtsov.habitbreaking.model.habitlogic.event.LockHabitEvent;
 import com.evgenykravtsov.habitbreaking.model.habitlogic.event.TimeToDisplayDeliveredEvent;
 import com.evgenykravtsov.habitbreaking.model.mode.ModeType;
 import com.evgenykravtsov.habitbreaking.presenter.event.HabitUsageDetectedEvent;
@@ -155,6 +156,11 @@ public class HabitService extends Service {
         public HabitTimerRunnable(boolean isNew, ModeType modeType) {
             this.modeType = modeType;
             threadStatus = true;
+
+            if (modeType == ModeType.CONTROL || modeType == ModeType.HEALTH) {
+                LockHabitEvent event = new LockHabitEvent();
+                EventBus.getDefault().post(event);
+            }
 
             if (isNew) {
                 seconds = 0;

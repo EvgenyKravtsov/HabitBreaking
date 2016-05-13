@@ -1,7 +1,10 @@
 package com.evgenykravtsov.habitbreaking.presenter;
 
+import android.util.Log;
+
 import com.evgenykravtsov.habitbreaking.model.habitlogic.HabitCounter;
 import com.evgenykravtsov.habitbreaking.model.habitlogic.HabitData;
+import com.evgenykravtsov.habitbreaking.model.habitlogic.event.LockHabitEvent;
 import com.evgenykravtsov.habitbreaking.model.habitlogic.event.TimeToDisplayDeliveredEvent;
 import com.evgenykravtsov.habitbreaking.model.mode.ModeType;
 import com.evgenykravtsov.habitbreaking.presenter.event.HabitUsageDetectedEvent;
@@ -17,6 +20,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Locale;
 
 public class HabitViewPresenter {
+
+    private static final String TAG = HabitViewPresenter.class.getSimpleName();
 
     // Module dependencies
     private SettingsStorageInteractor settingsStorageInteractor;
@@ -89,5 +94,12 @@ public class HabitViewPresenter {
                 seconds >= 10 ? seconds : "0" + seconds);
 
         habitView.setTimeCounterText(timeString);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLockHabit(LockHabitEvent event) {
+
+        // TODO Delete test code
+        Log.d(TAG, "Have to lock habit button");
     }
 }

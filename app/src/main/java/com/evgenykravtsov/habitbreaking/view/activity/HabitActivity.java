@@ -23,6 +23,8 @@ import butterknife.OnClick;
 
 public class HabitActivity extends AppCompatActivity implements HabitView {
 
+    // TODO Fix bug when timer not zero on Leisure mode activation
+
     private static final String TAG = HabitActivity.class.getSimpleName();
 
     ////

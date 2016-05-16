@@ -1,7 +1,5 @@
 package com.evgenykravtsov.habitbreaking.presenter;
 
-import android.util.Log;
-
 import com.evgenykravtsov.habitbreaking.model.habitlogic.HabitCounter;
 import com.evgenykravtsov.habitbreaking.model.habitlogic.HabitData;
 import com.evgenykravtsov.habitbreaking.model.habitlogic.event.LockHabitEvent;
@@ -17,6 +15,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 public class HabitViewPresenter {
@@ -73,6 +72,10 @@ public class HabitViewPresenter {
         HabitData habitData = HabitCounter.countHabit();
         habitStorageInteractor.saveHabitData(habitData);
 
+        settingsStorageInteractor.saveSettingAsLong(
+                SettingsStorageInteractor.SETTING_KEY_RESTRICTION_EXPIRE_DATE,
+                Calendar.getInstance().getTimeInMillis() / 1000 + 40);
+
         HabitUsageDetectedEvent event = new HabitUsageDetectedEvent();
         event.setModeType(getCurrentMode());
         EventBus.getDefault().post(event);
@@ -82,6 +85,12 @@ public class HabitViewPresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTimeToDisplayDelivered(TimeToDisplayDeliveredEvent event) {
+        if (event.getSeconds() < 0) {
+            habitView.setHabitButtonStatus(true);
+            habitView.setTimeCounterText("00:00:00");
+            return;
+        }
+
         long rawSeconds = event.getSeconds();
 
         int hours = (int) rawSeconds / 3600;
@@ -98,8 +107,6 @@ public class HabitViewPresenter {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLockHabit(LockHabitEvent event) {
-
-        // TODO Delete test code
-        Log.d(TAG, "Have to lock habit button");
+        habitView.setHabitButtonStatus(false);
     }
 }

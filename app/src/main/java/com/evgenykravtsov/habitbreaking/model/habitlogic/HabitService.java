@@ -26,8 +26,6 @@ import java.util.concurrent.TimeUnit;
 
 public class HabitService extends Service {
 
-    // TODO Hide service notification while in leisure mode
-
     // Module dependencies
     private SettingsStorageInteractor settingsStorageInteractor;
 
@@ -110,8 +108,9 @@ public class HabitService extends Service {
     }
 
     // TODO Delete test method
-    private long getRestrictionTimeInterval() {
-        return 100000;
+    private long getRestrictionExpireDate() {
+        return settingsStorageInteractor.loadSettingAsLong(
+                SettingsStorageInteractor.SETTING_KEY_RESTRICTION_EXPIRE_DATE, 0);
     }
 
     private ModeType getCurrentMode() {
@@ -150,6 +149,7 @@ public class HabitService extends Service {
         ModeType modeType;
         boolean threadStatus;
         long seconds;
+        long restrictionExpireDate;
 
         ////
 
@@ -160,14 +160,15 @@ public class HabitService extends Service {
             if (modeType == ModeType.CONTROL || modeType == ModeType.HEALTH) {
                 LockHabitEvent event = new LockHabitEvent();
                 EventBus.getDefault().post(event);
+
+                restrictionExpireDate = getRestrictionExpireDate();
             }
 
             if (isNew) {
                 seconds = 0;
             } else {
                 seconds = settingsStorageInteractor.loadSettingAsLong(
-                        SettingsStorageInteractor.SETTING_KEY_HABIT_TIMER_VALUE,
-                        0);
+                        SettingsStorageInteractor.SETTING_KEY_HABIT_TIMER_VALUE, 0);
             }
         }
 
@@ -200,8 +201,8 @@ public class HabitService extends Service {
                         SettingsStorageInteractor.SETTING_KEY_HABIT_TIMER_CONTROL_TIMESTAMP,
                         Calendar.getInstance().getTimeInMillis() / 1000);
                 long currentTimestamp = Calendar.getInstance().getTimeInMillis() / 1000;
-
                 seconds += currentTimestamp - controlTimestamp;
+
                 settingsStorageInteractor.saveSettingAsLong(
                         SettingsStorageInteractor.SETTING_KEY_HABIT_TIMER_CONTROL_TIMESTAMP,
                         currentTimestamp);
@@ -212,7 +213,6 @@ public class HabitService extends Service {
                 TimeToDisplayDeliveredEvent event = new TimeToDisplayDeliveredEvent();
                 event.setSeconds(seconds);
                 EventBus.getDefault().post(event);
-
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
@@ -222,11 +222,45 @@ public class HabitService extends Service {
             try {
                 TimeUnit.SECONDS.sleep(TIMER_INCREMENT);
 
-                // TODO Delete test code
-                Log.d(TAG, "RESTRICED");
+                TimeToDisplayDeliveredEvent event = new TimeToDisplayDeliveredEvent();
+                long calculatedTime = restrictionExpireDate - Calendar.getInstance().getTimeInMillis() / 1000;
+                event.setSeconds(calculatedTime);
+                EventBus.getDefault().post(event);
+
+                if (calculatedTime < 0) {
+                    settingsStorageInteractor.saveSettingAsBoolean(
+                            SettingsStorageInteractor.SETTING_KEY_HABIT_TIMER_STATUS, false);
+                }
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.evgenykravtsov.habitbreaking.R;
@@ -33,6 +34,7 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     @Bind(R.id.habit_screen_current_mode) TextView currentModeTextView;
     @Bind(R.id.habit_screen_time_zone_label) TextView timeZoneLabelTextView;
     @Bind(R.id.habit_screen_time_counter_label) TextView timeCounterTextView;
+    @Bind(R.id.habit_screen_habit_button) Button habitButton;
 
     ////
 
@@ -43,6 +45,15 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
     @Override
     public void setTimeCounterText(String timeText) {
         timeCounterTextView.setText(timeText);
+    }
+
+    @Override
+    public void setHabitButtonStatus(boolean status) {
+        if (status) {
+            habitButton.setClickable(true);
+        } else {
+            habitButton.setClickable(false);
+        }
     }
 
     ////
@@ -159,11 +170,11 @@ public class HabitActivity extends AppCompatActivity implements HabitView {
                 break;
             case CONTROL:
                 currentModeTextView.setText(getString(R.string.control_mode_title));
-                timeZoneLabelTextView.setText(getString(R.string.from_last_usage_label));
+                timeZoneLabelTextView.setText(getString(R.string.to_next_usage_label));
                 break;
             case HEALTH:
                 currentModeTextView.setText(getString(R.string.health_mode_title));
-                timeZoneLabelTextView.setText(getString(R.string.from_last_usage_label));
+                timeZoneLabelTextView.setText(getString(R.string.to_next_usage_label));
                 break;
         }
     }

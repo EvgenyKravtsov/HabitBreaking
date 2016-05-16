@@ -7,6 +7,7 @@ public interface SettingsStorageInteractor {
     String SETTING_KEY_HABIT_TIMER_STATUS = "setting_key_habit_timer_status";
     String SETTING_KEY_HABIT_TIMER_VALUE = "setting_key_habit_timer_value";
     String SETTING_KEY_HABIT_TIMER_CONTROL_TIMESTAMP = "setting_key_habit_timer_control_timestamp";
+    String SETTING_KEY_RESTRICTION_EXPIRE_DATE = "setting_key_restrction_expire_date";
 
     int SETTING_LEISURE_MODE_VALUE = 0;
     int SETTING_CONTROL_MODE_VALUE = 1;
